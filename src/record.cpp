@@ -2,10 +2,27 @@
 #include <ros/ros.h>
 #include <boost/thread.hpp>
 
+void Record::cmdCallback(const std_msgs::String& robotCMD)
+{
+  ROS_INFO("STO_sysMsgCallback, msg contents: %s", robotCMD.data.c_str());
+  //const char* cCMD = robotCMD.data.c_str();
+  if(robotCMD.data == "record"){
+        if(b_record){
+            ros::shutdown();
+        }else{
+            b_record = true;
+        }
+    }else if(robotCMD.data == "stop"){
+        ros::shutdown();
+    }
+}
+
+
 Record::Record(ros::NodeHandle &nh,rosbag::RecorderOptions const& options):
     rosbag::Recorder(options)
 {
     service_srv = nh.advertiseService("cmd",&Record::string_command,this);
+    topic_cmd = nh.subscribe("/syscommand", 2, &Record::cmdCallback,this);
     b_record    = false;
 
 }

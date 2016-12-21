@@ -4,13 +4,14 @@
 #include "record_ros/String_cmd.h"
 #include <std_msgs/String.h>
 #include <rosbag/recorder.h>
-
+#include "std_msgs/String.h"
+#include <string>
 class Record : public rosbag::Recorder{
 
 public:
 
     Record(ros::NodeHandle& nh,rosbag::RecorderOptions const& options);
-
+    void cmdCallback(const std_msgs::String& robotCMD);
     void wait_for_callback();
 
 private:
