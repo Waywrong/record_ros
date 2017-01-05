@@ -2,7 +2,7 @@
 <launch>
 
 	<arg name="path_save"   default="/home/peter/data"/>
-	<arg name="topic"  	default="/scan /imu /velodyne_points /wireless_data"/>
+	<arg name="topic"  	default="/scan /imu /velodyne_packets /wireless_data"/>
 	<arg name="file_name"  	default="stoTest"/>
 
 	<group ns="record">

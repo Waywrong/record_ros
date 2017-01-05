@@ -13,6 +13,7 @@ public:
     Record(ros::NodeHandle& nh,rosbag::RecorderOptions const& options);
     void cmdCallback(const std_msgs::String& robotCMD);
     void wait_for_callback();
+    void recording_heartbeat();
 
 private:
 
