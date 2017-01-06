@@ -50,6 +50,8 @@ include_directories(
 
 add_executable(${PROJECT_NAME} ${SRC_FILES} ${HEADER_FILES})
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${Boost_REGEX_LIBRARY})
+add_executable(pre_check_node src/pre_check_node)
+target_link_libraries(pre_check_node ${catkin_LIBRARIES})
 
 
 add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS} ${PROJECT_NAME}_gencpp ${PROJECT_NAME}_generate_messages_cpp)

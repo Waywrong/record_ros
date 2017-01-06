@@ -6,42 +6,25 @@ void Record::cmdCallback(const std_msgs::String& robotCMD)
 {
   ROS_INFO("STO_sysMsgCallback, msg contents: %s", robotCMD.data.c_str());
   //const char* cCMD = robotCMD.data.c_str();
-  if(robotCMD.data == "record"){
+  if(robotCMD.data == "start"){
         if(b_record){
-	    b_sensor_velo = false;
             ros::shutdown();
         }else{
             b_record = true;
-	    if(b_sensor_velo)
-	      ROS_INFO("STO: velodyne_msgs error !!!!!");
         }
     }else if(robotCMD.data == "stop"){
-	b_sensor_velo = false;
         ros::shutdown();
     }
 }
 
-void Record::velodyneCallback(const velodyne_msgs::VelodyneScan::ConstPtr &scanMsg)
-{
-  int lidar_packets_size = scanMsg->packets.size();//76
-  if(lidar_packets_size>37)
-    b_sensor_velo = true;
-}
-
-void Record::imuCallback(const sensor_msgs::Imu::ConstPtr& inImu)
-{
-}
 
 Record::Record(ros::NodeHandle &nh,rosbag::RecorderOptions const& options):
     rosbag::Recorder(options)
 {
     service_srv = nh.advertiseService("cmd",&Record::string_command,this);
     topic_cmd = nh.subscribe("/syscommand", 2, &Record::cmdCallback,this);
-    topic_velodyne = nh.subscribe("velodyne_packets", 10, &Record::velodyneCallback,this);
-    topic_imu = nh.subscribe<sensor_msgs::Imu>("/imu", 1, &Record::imuCallback,this);
     b_record    = false;
-    b_sensor_velo = false;
-    b_sensor_imu = false;
+
 }
 
 void Record::wait_for_callback(){
@@ -96,7 +79,6 @@ bool Record::string_command(record_ros::String_cmd::Request& req, record_ros::St
     ROS_INFO("Record callback");
     if(cmd == "record"){
         if(b_record){
-	    b_sensor_velo = false;
             ros::shutdown();
             res.res = "stopping recorder";
         }else{
@@ -106,12 +88,10 @@ bool Record::string_command(record_ros::String_cmd::Request& req, record_ros::St
         }
         return true;
     }else if(cmd == "stop"){
-	b_sensor_velo = false;
         ros::shutdown();
         res.res = "stopping recorder";
         return true;
     }else{
-	b_sensor_velo = false;
         res.res = "No such command[" + cmd + "] in [Record::string_command]";
         ROS_WARN_STREAM(res.res);
         return false;

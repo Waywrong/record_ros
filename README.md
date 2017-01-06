@@ -11,3 +11,9 @@ Three arguments have to be over-written in your own launch file;
 * **path_save**: system dependent path to folder where all the rosbags will be put: /home/user/rosbag_record 
 * **topic**: set of space sperated topics: topic1 topic2 topic3 ...
 * **file_name**: the name prefix which will be put before the rosbag time stamp (optional)
+
+# Check before Record
+
+    rosrun record_ros pre_check_node
+    
+  This node will pub /syscommand std_msgs/String start, while all sensors are ready.
