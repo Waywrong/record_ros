@@ -71,7 +71,10 @@ int main(int argc, char** argv)
             topics.push_back(*iter);
         }
         
-        options.topics = topics;    
+        options.topics = topics;  
+  
+	options.min_space = 1024*1024*1024;
+	options.min_space_str = "1G";
     }
 
     Record* record = new Record(nh,options);
